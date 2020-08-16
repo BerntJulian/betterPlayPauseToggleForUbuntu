@@ -6,11 +6,12 @@
 
 #TODO: move spotify at the bottom of the window manager focus
 
-#Check if spotify is running
+#Check if spotify is not running, if not open it.
 if ! ps --no-headers -C spotify -o args,state; then
     
-    #Used for getting spotify out of focus
+    #Used for getting the windowfocus back to what program the original focus was. 
     windowId=$(xdotool getactivewindow)
+    
     (spotify &)
     sleep 0.5;
 
@@ -18,7 +19,7 @@ if ! ps --no-headers -C spotify -o args,state; then
     dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
     sleep 0.5;
 
-    #If not playing dont put spotify out of focus
+    #If spotify now are playing music then change the focus back to the origial window.
     if pacmd list-sink-inputs | grep spotify; then
         xdotool windowfocus $windowId
         xdotool windowactivate $windowId
