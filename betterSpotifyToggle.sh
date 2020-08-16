@@ -21,7 +21,7 @@ dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPl
 sleep 0.5;
 
 
-#If spotify not are playing change the window that should be in focus to Spotify.
+#If spotify not are playing music, change the window that should be in focus to Spotify.
 if ! pacmd list-sink-inputs | grep spotify; then
     pid=$(pgrep spotify | head -n 1)                  
     windowId=$(xdotool search --pid "$pid" | tail -2) #-2 magic
