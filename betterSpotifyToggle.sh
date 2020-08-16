@@ -9,7 +9,7 @@
 #Used for getting the windowfocus back to what program the original focus was. 
 windowId=$(xdotool getactivewindow)
 
-#Check if spotify is not running, if not open it.
+#Check if spotify is running, if not open it.
 if ! ps --no-headers -C spotify -o args,state; then    
     (spotify &)
     sleep 0.5;
