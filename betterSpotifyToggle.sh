@@ -2,34 +2,24 @@
 
 #map this script to Custom Shortcuts  at the bottom under Settings->Devices->Keyboard
 #Name:      w/e
-#Command:   sh /home/username/bin/betterSpotifyToggle.sh   //tilde is not supported!
-
+#Command:   /home/username/bin/betterSpotifyToggle.sh   //tilde is not supported!
 #TODO: move spotify at the bottom of the window manager focus
 
-#Used for getting the windowfocus back to what program the original focus was. 
-windowId=$(xdotool getactivewindow)
-
 #Check if spotify is not running, if not open it.
-if ! ps --no-headers -C spotify -o args,state; then    
-    (spotify &)
-    sleep 0.5
+if ! ps --no-headers -C spotify -o args,state; then
+    windowId=$(xdotool getactivewindow)
+    SECONDS=0
+    timeForSpotidyToOpen=5
+    (spotify &) 
+    while (( SECONDS < timeForSpotidyToOpen )); do pidof spotify && { sleep 1;break; } done
+    xdotool windowfocus $windowId
+    xdotool windowactivate $windowId
 fi
 
-pressPlayFor=5
-SECONDS=0
-#Press play until soptify is open
-while ! dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause && (( SECONDS < pressPlayFor ))
-do
-    sleep 0.2
-done
-sleep 0.5
+dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause
+sleep 0.3
+pacmd list-sink-inputs | grep spotify && exit
 
-#If spotify does not play music after play is pressed, keep spotify in focus.
-if ! pacmd list-sink-inputs | grep spotify; then
-    pid=$(pgrep spotify | head -n 1)                  
-    windowId=$(xdotool search --pid "$pid" | tail -2) #-2 magic
-fi
-
-#Bring either original window or spotify in focus.
-xdotool windowfocus $windowId
-xdotool windowactivate $windowId
+spotifyWid=$(wmctrl -l | grep -P "\bSpotify( Premium)?$" | cut -f 1 -d " ")
+xdotool windowfocus $spotifyWid
+xdotool windowactivate $spotifyWid
