@@ -1,8 +1,8 @@
 #!/bin/bash
 
-#map this script to Custom Shortcuts  at the bottom under Settings->Devices->Keyboard
+#map this script to Custom Shortcuts at the bottom under Settings->Devices->Keyboard
 #Name:      w/e
-#Command:   /home/username/bin/betterSpotifyToggle.sh   //tilde is not supported!
+#Command:   /home/{username}/bin/betterSpotifyToggle.sh   //tilde is not supported!
 #TODO: move spotify at the bottom of the window manager focus
 
 #Check if spotify is not running, if not open it.
