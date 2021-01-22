@@ -9,9 +9,9 @@
 if ! ps --no-headers -C spotify -o args,state; then
     windowId=$(xdotool getactivewindow)
     SECONDS=0
-    timeForSpotidyToOpen=5
+    timeForSpotifyToOpen=5
     (spotify &) 
-    while (( SECONDS < timeForSpotidyToOpen )); do pidof spotify && { sleep 1;break; } done
+    while (( SECONDS < timeForSpotifyToOpen )); do pidof spotify && { sleep 1;break; } done
     xdotool windowfocus $windowId
     xdotool windowactivate $windowId
 fi
